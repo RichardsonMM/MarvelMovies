@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:marvel_api/models/mcu_models.dart';
+import 'package:marvel_api/movie_details.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -35,14 +36,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 splashRadius: 20,
                 onPressed: () {}),
           ),
-          Spacer(),
-          Center(
+          const Spacer(),
+          const Center(
             child: Text(
               'Marvel Movies',
               style: TextStyle(fontSize: 20),
             ),
           ),
-          Spacer(),
+          const Spacer(),
           Padding(
             padding: EdgeInsets.only(right: 10.0),
             child: IconButton(
@@ -61,36 +62,46 @@ class _HomeScreenState extends State<HomeScreen> {
                 mainAxisSpacing: 10,
               ),
               itemBuilder: (BuildContext context, int index) {
-                return Container(
-                  margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                  width: 50,
-                  height: 100,
-                  child: Column(
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(17),
-                        child: CachedNetworkImage(
-                          imageUrl: mcuMoviesList[index].coverUrl.toString(),
-                          fit: BoxFit.cover,
-                          placeholder: (context, url) =>
-                              Image.asset('images/1841128648.jpg'),
-                        ),
+                return InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: ((context) => MovieDetails(index: index)),
                       ),
-                      Spacer(),
-                      Center(
-                        child: Text(
-                          mcuMoviesList[index].title.toString(),
-                          style: TextStyle(color: Colors.white, fontSize: 15),
+                    );
+                  },
+                  radius: 2,
+                  child: Container(
+                    margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                    width: 50,
+                    height: 100,
+                    child: Column(
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(17),
+                          child: CachedNetworkImage(
+                            imageUrl: mcuMoviesList[index].coverUrl.toString(),
+                            fit: BoxFit.cover,
+                          ),
                         ),
-                      ),
-                    ],
+                        Spacer(),
+                        Align(
+                          alignment: Alignment.topCenter,
+                          child: Text(
+                            mcuMoviesList[index].title.toString(),
+                            style: TextStyle(color: Colors.white, fontSize: 15),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 );
               },
             )
           : Container(
-              width: 50,
-              height: 50,
+              width: double.infinity,
+              height: double.infinity,
               child: Center(
                 child: CircularProgressIndicator(color: Colors.white70),
               ),
